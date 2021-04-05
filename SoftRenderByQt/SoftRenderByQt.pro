@@ -25,10 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+    device.cpp \
+    screen.cpp
 
 HEADERS += \
-        mainwindow.h
+    device.h \
+    screen.h \
+    vector.h \
+    vertex.h \
+    objmodel.h
 
 FORMS += \
         mainwindow.ui
