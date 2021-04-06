@@ -3,6 +3,7 @@
 #include <string>
 #include "device.h"
 #include "objmodel.h"
+#include "vector4.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -19,7 +20,13 @@ int main(int argc, char *argv[])
 //    }
 //    label->setPixmap(QPixmap::fromImage(screen));
 //    label->setGeometry(0,0,screen.width(),screen.height());
-    ObjModel model("cow");
+    //ObjModel model("models/sample.obj");
+    Vector4 p1(60,50,0,0);
+    Vector4 p2(120,710,0,0);
+    //p1.normalize();
+    cout<< p1.getLength() << endl;
+
+    device.drawLine(p1,p2,{50,50,50});
     device.show();
 
     return a.exec();

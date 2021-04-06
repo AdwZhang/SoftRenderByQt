@@ -1,16 +1,16 @@
 #ifndef VERTEX_H
 #define VERTEX_H
-#include "vector.h"
+#include "vector4.h"
 
-struct Color { float r; float g; float b; };
+struct Color { int r; int g; int b; };
 struct Texcoord { float u; float v; };
 
 struct Vertex
 {
-    Vector pos;
+    Vector4 pos;
     Color color;
     Texcoord tex;
-    Vector normal;
+    Vector4 normal;
     float rhw; // 透视矫正
 };
 

@@ -20,15 +20,16 @@ public:
         while(getline(myfile,temp))
         {
             for(int i = 0;i < temp.size(); i++){
+
             }
         }
         myfile.close();
-        outfile.close();
+        //outfile.close();
 
     }
 
 private:
-    Vertex v;
+    Vector4 vertexs;
     //Faces *face;
 };
 

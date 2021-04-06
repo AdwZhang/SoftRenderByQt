@@ -26,14 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     device.cpp \
-    screen.cpp
+    screen.cpp \
+    vector4.cpp \
+    matrix.cpp
 
 HEADERS += \
     device.h \
     screen.h \
-    vector.h \
     vertex.h \
-    objmodel.h
+    objmodel.h \
+    vector4.h \
+    matrix.h
 
 FORMS += \
         mainwindow.ui
