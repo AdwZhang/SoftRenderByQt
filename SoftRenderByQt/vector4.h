@@ -36,4 +36,5 @@ public:
 
 };
 
+typedef Vector4 Point;
 #endif // VECTOR_H

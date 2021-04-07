@@ -28,7 +28,8 @@ SOURCES += \
     device.cpp \
     screen.cpp \
     vector4.cpp \
-    matrix.cpp
+    matrix.cpp \
+    transform.cpp
 
 HEADERS += \
     device.h \
@@ -36,7 +37,8 @@ HEADERS += \
     vertex.h \
     objmodel.h \
     vector4.h \
-    matrix.h
+    matrix.h \
+    transform.h
 
 FORMS += \
         mainwindow.ui

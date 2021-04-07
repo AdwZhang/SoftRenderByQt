@@ -1,12 +1,14 @@
 #include "device.h"
 
-Device::Device(QString name, int width, int height)
+Device::Device(QString name, int width, int height):transform(width,height)
 {
     this->resize(width,height);
     this->width = width;
     this->height = height;
     this->zBuffer = vector<vector<float>>(width,vector<float>(height,0));
 
+    // 初始化 transform
+    this->setCamera(3.f, 3.f, 3.f);
     this->setWindowTitle(name);
     this->label = new QLabel(this);
     screen = Screen(width,height);
@@ -17,6 +19,15 @@ Device::Device(QString name, int width, int height)
     }
     label->setPixmap(QPixmap::fromImage(screen));
     label->setGeometry(0,0,screen.width(),screen.height());
+}
+
+void Device::setCamera(float x, float y, float z)
+{
+    Vector4 eye = { x, y, z, 1.f }, at = { 0.f, 0.f, 0.f, 1.f }, up = { 0.f, 1.f, 0.f, 1.f };
+    Matrix m;
+    m.setLookAt(eye, at, up);
+    transform.setView(m);
+    transform.update();
 }
 
 // 画点
@@ -97,7 +108,70 @@ void Device::drawLine(const Vector4& p1, const Vector4& p2, Color color)
 }
 
 // 画三角形
-void Device::drawTriangle(const Vertex& p1, const Vertex& p2, const Vertex& p3)
+void Device::drawTriangle(const Vertex& v1, const Vertex& v2, const Vertex& v3)
 {
+    Point c1 = transform.apply(v1.pos);
+    Point c2 = transform.apply(v2.pos);
+    Point c3 = transform.apply(v3.pos);
 
+    if(transform.checkCvv(c1)) return;
+    if(transform.checkCvv(c2)) return;
+    if(transform.checkCvv(c3)) return;
+
+    Point p1, p2, p3, min, max;
+
+    p1 = transform.homogenize(c1);
+    p2 = transform.homogenize(c2);
+    p3 = transform.homogenize(c3);
+
+    Color color = {50,50,50};
+    drawLine(p1, p2, color);
+    drawLine(p1, p3, color);
+    drawLine(p2, p3, color);
+}
+
+void Device::drawBox(float theta)
+{
+    Matrix mm;
+    mm.setRotate(0.f, 1.0f, 0.f, theta);
+
+    Matrix tm;
+    tm.setTranslate(5.0f, 0.f, 0.f);
+
+    Matrix world;
+    world = Matrix::mul(mm,tm);
+
+    transform.setWorld(world);
+    transform.update();
+
+    Vertex vs[8] = {
+        {{-1.f,  1.f, -1.f, 1.f}, {1.0f, 0.0f, 0.0f}, {0.f, 0.f}, {-1.f,  1.f, -1.f, 0.f},  1.f },
+        {{-1.f,  1.f,  1.f, 1.f}, {0.0f, 1.0f, 0.0f}, {0.f, 1.f}, {-1.f,  1.f,  1.f, 0.f}, 1.f },
+        {{ 1.f,  1.f,  1.f, 1.f}, {0.0f, 0.0f, 1.0f}, {1.f, 1.f}, { 1.f,  1.f,  1.f, 0.f}, 1.f },
+        {{ 1.f,  1.f, -1.f, 1.f}, {1.0f, 1.0f, 0.0f}, {0.f, 1.f}, { 1.f,  1.f, -1.f, 0.f}, 1.f },
+
+        {{-1.f, -1.f, -1.f, 1.f}, {0.0f, 0.0f, 1.0f}, {1.f, 0.f}, {-1.f, -1.f, -1.f, 0.f}, 1.f },
+        {{-1.f, -1.f,  1.f, 1.f}, {1.0f, 1.0f, 0.0f}, {0.f, 1.f}, {-1.f, -1.f,  1.f, 0.f}, 1.f },
+        {{ 1.f, -1.f,  1.f, 1.f}, {1.0f, 0.0f, 0.0f}, {1.f, 1.f}, { 1.f, -1.f,  1.f, 0.f}, 1.f },
+        {{ 1.f, -1.f, -1.f, 1.f}, {0.0f, 1.0f, 0.0f}, {1.f, 1.f}, { 1.f, -1.f, -1.f, 0.f}, 1.f },
+    };
+
+    drawPlane(vs[0], vs[1], vs[2], vs[3]);
+    drawPlane(vs[7], vs[4], vs[0], vs[3]);
+    drawPlane(vs[2], vs[6], vs[7], vs[3]);
+    drawPlane(vs[5], vs[1], vs[0], vs[4]);
+    drawPlane(vs[2], vs[1], vs[5], vs[6]);
+    drawPlane(vs[6], vs[5], vs[4], vs[7]);
+}
+
+
+void Device::drawPlane(const Vertex& v1, const Vertex& v2, const Vertex& v3, const Vertex& v4)
+{
+    // 必须重新制定一下纹理，不然就乱掉了
+    Vertex t1 = v1, t2 = v2, t3 = v3, t4 = v4;
+    t1.tex.u = 0.f; t2.tex.u = 1.f; t3.tex.u = 1.f; t4.tex.u = 0.f;
+    t1.tex.v = 0.f; t2.tex.v = 0.f; t3.tex.v = 1.f; t4.tex.v = 1.f;
+
+    drawTriangle(t1, t2, t3);
+    drawTriangle(t3, t4, t1);
 }

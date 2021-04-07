@@ -13,6 +13,9 @@ public:
     // matrix zero
     void setZero();
 
+    // vector v = x * m
+    Vector4 apply(const Vector4& x);
+
     // 平移变换
     void setTranslate(float x, float y, float z);
 
@@ -26,7 +29,7 @@ public:
     void setLookAt(const Vector4& eye, const Vector4& at, const Vector4& up);
 
     // perspective透视
-    void setPerspective(float fovy, float aspect, float zn, float fn);
+    void setPerspective(float fovy, float aspect, float zn, float zf);
 
     // matrix c = a + b
     static Matrix add(const Matrix& a, const Matrix& b);
@@ -39,9 +42,6 @@ public:
 
     // matrix m = a * f
     static Matrix scale(const Matrix& a, const float f);
-
-    // matrix v = x * m
-    static Vector4 apply(const Vector4& x, const Matrix& m);
 
 
 };

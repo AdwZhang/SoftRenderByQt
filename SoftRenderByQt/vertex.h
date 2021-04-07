@@ -2,7 +2,7 @@
 #define VERTEX_H
 #include "vector4.h"
 
-struct Color { int r; int g; int b; };
+struct Color { float r; float g; float b; };
 struct Texcoord { float u; float v; };
 
 struct Vertex

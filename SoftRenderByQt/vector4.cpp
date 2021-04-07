@@ -11,7 +11,7 @@ Vector4::Vector4(float x1, float y1, float z1, float w1):x(x1),y(y1),z(z1),w(w1)
 //  获取矢量模
 float Vector4::getLength()
 {
-    return sqrt(x*x + y*y + z*z + w*w);
+    return sqrt(x*x + y*y + z*z);
 }
 
 //  矢量归一化

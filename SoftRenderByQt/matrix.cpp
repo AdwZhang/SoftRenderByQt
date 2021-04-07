@@ -22,6 +22,18 @@ void Matrix::setZero()
     }
 }
 
+// vector4 v = x * m
+Vector4 Matrix::apply(const Vector4& x)
+{
+    Vector4 v;
+    float X = x.x, Y = x.y, Z = x.z, W = x.w;
+    v.x = X * m[0][0] + Y * m[1][0] + Z * m[2][0] + W * m[3][0];
+    v.y = X * m[0][1] + Y * m[1][1] + Z * m[2][1] + W * m[3][1];
+    v.z = X * m[0][2] + Y * m[1][2] + Z * m[2][2] + W * m[3][2];
+    v.w = X * m[0][3] + Y * m[1][3] + Z * m[2][3] + W * m[3][3];
+    return v;
+}
+
 // 平移变换
 void Matrix::setTranslate(float x, float y, float z)
 {
@@ -68,13 +80,43 @@ void Matrix::setRotate(float x, float y, float z, float theta)
 // 设置摄像机
 void Matrix::setLookAt(const Vector4& eye, const Vector4& at, const Vector4& up)
 {
+    Vector4 xaxis, yaxis, zaxis;
 
+    zaxis = Vector4::sub(at, eye); // 眼睛前方 z 轴
+    zaxis.normalize();
+    xaxis = Vector4::crossProduct(up, zaxis); // up 和 z = x 轴
+    xaxis.normalize();
+    yaxis = Vector4::crossProduct(zaxis, xaxis);
+
+    m[0][0] = xaxis.x;
+    m[1][0] = xaxis.y;
+    m[2][0] = xaxis.z;
+    m[3][0] = -Vector4::dotProduct(xaxis, eye);
+
+    m[0][1] = yaxis.x;
+    m[1][1] = yaxis.y;
+    m[2][1] = yaxis.z;
+    m[3][1] = -Vector4::dotProduct(yaxis, eye);
+
+    m[0][2] = zaxis.x;
+    m[1][2] = zaxis.y;
+    m[2][2] = zaxis.z;
+    m[3][2] = -Vector4::dotProduct(zaxis, eye);
+
+    m[0][3] = m[1][3] = m[2][3] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
 // perspective透视
-void Matrix::setPerspective(float fovy, float aspect, float zn, float fn)
+void Matrix::setPerspective(float fovy, float aspect, float zn, float zf)
 {
-
+    float fax = 1.0f / (float)tan(fovy * 0.5f);
+    this->setZero();
+    m[0][0] = (float)(fax / aspect);
+    m[1][1] = (float)(fax);
+    m[2][2] = zf / (zf - zn);
+    m[3][2] = -zn * zf / (zf - zn);
+    m[2][3] = 1;
 }
 
 
@@ -128,20 +170,8 @@ Matrix Matrix::scale(const Matrix& a, const float f)
 {
     Matrix c;
     for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++)
-                c.m[i][j] = a.m[i][j] * f;
-        }
+        for (int j = 0; j < 4; j++)
+            c.m[i][j] = a.m[i][j] * f;
+    }
     return c;
-}
-
-// vector4 v = x * m
-Vector4 Matrix::apply(const Vector4& x, const Matrix& m)
-{
-    Vector4 v;
-    float X = x.x, Y = x.y, Z = x.z, W = x.w;
-    v.x = X * m.m[0][0] + Y * m.m[1][0] + Z * m.m[2][0] + W * m.m[3][0];
-    v.y = X * m.m[0][1] + Y * m.m[1][1] + Z * m.m[2][1] + W * m.m[3][1];
-    v.z = X * m.m[0][2] + Y * m.m[1][2] + Z * m.m[2][2] + W * m.m[3][2];
-    v.w = X * m.m[0][3] + Y * m.m[1][3] + Z * m.m[2][3] + W * m.m[3][3];
-    return v;
 }
