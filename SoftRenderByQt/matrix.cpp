@@ -82,7 +82,7 @@ void Matrix::setLookAt(const Vector4& eye, const Vector4& at, const Vector4& up)
 {
     Vector4 xaxis, yaxis, zaxis;
 
-    zaxis = Vector4::sub(at, eye); // 眼睛前方 z 轴
+    zaxis = Vector4::sub(at, eye); // 眼睛前方 z 轴方向矢量
     zaxis.normalize();
     xaxis = Vector4::crossProduct(up, zaxis); // up 和 z = x 轴
     xaxis.normalize();
@@ -107,7 +107,7 @@ void Matrix::setLookAt(const Vector4& eye, const Vector4& at, const Vector4& up)
     m[3][3] = 1.0f;
 }
 
-// perspective透视
+// perspective透视 Fov:纵向的视角大小 aspect:裁剪面的宽高比 zNear:近裁剪面离摄像机的距离 zFar:远裁剪面离摄像机的距离
 void Matrix::setPerspective(float fovy, float aspect, float zn, float zf)
 {
     float fax = 1.0f / (float)tan(fovy * 0.5f);

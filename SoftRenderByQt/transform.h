@@ -23,7 +23,7 @@ public:
     // 检查齐次坐标同 cvv 的边界用于视锥裁剪
     int checkCvv(const Point& v);
 
-    int checkBackCulling(const Vector4& v);
+    //int checkBackCulling(const Vector4& v);
 
     // 设定世界坐标变换矩阵
     void setWorld(const Matrix& m);

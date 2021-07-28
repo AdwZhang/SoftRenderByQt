@@ -29,7 +29,6 @@ public:
 
 public slots:
     // 画立方体
-    void drawBox(float theta);
     void drawBox();
 
     // 画四边形
@@ -41,9 +40,10 @@ private:
     QLabel *label;
     int width;
     int height;
-    vector<vector<float>> zBuffer;
+    //vector<vector<float>> zBuffer;
     Transform transform;
     float dis;
+    float theta;
 protected:
     void keyPressEvent(QKeyEvent * event);
 };

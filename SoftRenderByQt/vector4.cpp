@@ -51,13 +51,13 @@ Vector4 Vector4::sub(const Vector4& v1, const Vector4& v2)
     return ans;
 }
 
-// 点乘
+// 点乘 运算对象必须是单位向量 表示两个向量之间夹角的余弦值 点乘常用来计算一个向量在另一个向量上的投影
 float Vector4::dotProduct(const Vector4& v1, const Vector4& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-// 叉乘
+// 叉乘 得到的结果是两个向量所确定的平面垂直的另一个新向量
 Vector4 Vector4::crossProduct(const Vector4& v1, const Vector4& v2)
 {
     Vector4 ans;

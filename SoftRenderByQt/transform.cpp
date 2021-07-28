@@ -59,10 +59,10 @@ int Transform::checkCvv(const Point& v)
     return check;
 }
 
-int Transform::checkBackCulling(const Vector4& v)
-{
+//int Transform::checkBackCulling(const Vector4& v)
+//{
 
-}
+//}
 
 // 设定世界坐标变换矩阵
 void Transform::setWorld(const Matrix& m)

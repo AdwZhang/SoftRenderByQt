@@ -4,7 +4,6 @@
 #include "device.h"
 #include "objmodel.h"
 #include "vector4.h"
-#include "mythread.h"
 #include<QTimer>
 using namespace std;
 

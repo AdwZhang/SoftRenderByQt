@@ -149,7 +149,7 @@ void Device::drawBox()
     tm.setTranslate(1.0f, 0.f, 0.f);
 
     Matrix world;
-    world = Matrix::mul(tm,mm);
+    world = Matrix::mul(mm,tm);
 
     transform.setWorld(world);
     transform.update();
